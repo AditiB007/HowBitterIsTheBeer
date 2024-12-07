@@ -3,4 +3,6 @@ title: "How Bitter Is The Beer"
 format: html
 ---
 
-test
+```{r}
+df_beer <- read.csv("beer_train.csv")
+```
