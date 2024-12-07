@@ -1,8 +1,10 @@
 ---
 title: "How Bitter Is The Beer"
 format: html
+echo: true
 ---
 
 ```{r}
-df_beer <- read.csv("beer_train.csv")
+beerdf = read.csv("beer_train.csv")
+head(beerdf)
 ```
