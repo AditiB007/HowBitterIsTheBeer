@@ -1,6 +1,10 @@
 ---
 title: "How Bitter Is The Beer"
 format: html
+echo: true
 ---
 
-test
+```{r}
+beerdf = read.csv("beer_train.csv")
+head(beerdf)
+```
