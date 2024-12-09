@@ -54,3 +54,12 @@ Now to run some summary stats
 ```{r}
 summary(beerdf_new)
 ```
+Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40. 
+```{r}
+sum(beerdf$srm == "Over 40")
+
+beerdf_new <- ifelse(beerdf_new$srm == "Over 40", "String", "Numerical")
+
+class_counts <- table(beerdf_new$srm)
+print(class_counts)
+```
