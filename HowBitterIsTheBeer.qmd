@@ -63,3 +63,6 @@ beerdf_new <- ifelse(beerdf_new$srm == "Over 40", "String", "Numerical")
 class_counts <- table(beerdf_new$srm)
 print(class_counts)
 ```
+```{r}
+hist(beerdf_new$abv, main = "Histogram of ABV", xlab = "ABV", ylab = "Frequency")
+```
