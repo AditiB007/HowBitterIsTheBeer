@@ -6,5 +6,63 @@ echo: true
 
 ```{r}
 beerdf = read.csv("beer_train.csv")
-head(beerdf)
+#head(beerdf)
+View(beerdf)
+dim(beerdf)
+colnames(beerdf)
+```
+The data set contains 6,000 observations and 8 variables to predict the International Bittering Units (IBU) of a beer.
+
+The 9 variables (exluding obervation identifiers) include: 
+- abv - Alcohol by Volume (ABV) measures the amount of alcohol in a beverage.
+- available - Time of year the beer is available.
+- description - Description of the beer provided by the makers of the beer.
+- glass - The type of glass the beer is intended to be served in
+- ibu - International Bittering Units (IBU) measures the bitterness of beer. 
+- isOrganic - Identifies if the beer is organic by Yes (Y) or No(N).
+- name - Name of beer brand or beer type when brand is not given.
+- originalGravity - Original Gravity (OG) measures the density of a beer wort before fermintation.
+- srm - Standard Reference Method (SRM) measures a beers color.
+
+We will beging by removing unnessesary predictors from our data set. We can remove the (descriptive data/nominal?) from the original data set such as, available, description, glass and name. These variables contain too many categories and cannot be converted into numerics for a comprehensive analysis. We will exclude glass as it has 2342 missing values, over a third of the observations. 
+```{r}
+# Number of missing data values in glass 
+sum(beerdf$glass == "")
+```
+```{r}
+sum(is.na(beerdf$glass))
+beerdf_new <- subset(beerdf, select = -c(available, description, glass, name))
+
+#View(beerdf_new)
+#dim(beerdf_new)
+#colnames(beerdf_new)
+```
+
+Next we will change categorical values to numeric values. Changing "isOrganic" variables to binary variables. Yes = 1 and No = 0
+```{r}
+#table(beerdf$isOrganic)
+beerdf_new$isOrganic[which(beerdf_new$isOrganic=="Y")] <- 1
+
+beerdf_new$isOrganic[which(beerdf_new$isOrganic=="N")] <- 0
+
+beerdf_new$isOrganic <- as.numeric(beerdf_new$isOrganic)
+
+View(beerdf_new)
+#table(beerdf$isOrganic)
+```
+Now to run some summary stats
+```{r}
+summary(beerdf_new)
+```
+Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40. 
+```{r}
+sum(beerdf$srm == "Over 40")
+
+beerdf_new <- ifelse(beerdf_new$srm == "Over 40", "String", "Numerical")
+
+class_counts <- table(beerdf_new$srm)
+print(class_counts)
+```
+```{r}
+hist(beerdf_new$abv, main = "Histogram of ABV", xlab = "ABV", ylab = "Frequency")
 ```
