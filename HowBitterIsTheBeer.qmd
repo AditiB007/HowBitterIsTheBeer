@@ -7,6 +7,12 @@ echo: true
 ```{r}
 install.packages("tidyverse")
 library(tidyverse)
+install.packages("ggplot2")
+library(ggplot2)
+```
+
+```{r}
+
 ```
 
 # **Introduction**
@@ -51,13 +57,13 @@ To conduct a meaning full analysis we will need to convert categorical data to n
 
 ```{r}
 #table(beerdf$isOrganic)
-beerdf_new$isOrganic[which(beerdf_new$isOrganic=="Y")] <- 1
+beerdf$isOrganic[which(beerdf$isOrganic=="Y")] <- 1
 
-beerdf_new$isOrganic[which(beerdf_new$isOrganic=="N")] <- 0
+beerdf$isOrganic[which(beerdf$isOrganic=="N")] <- 0
 
-beerdf_new$isOrganic <- as.numeric(beerdf_new$isOrganic)
+beerdf$isOrganic <- as.numeric(beerdf$isOrganic)
 
-View(beerdf_new)
+View(beerdf)
 #table(beerdf$isOrganic)
 ```
 
@@ -73,15 +79,14 @@ By computing the sum of cells with no response we can observe that there are 234
 In addition we can remove the descriptive and nominal variables from the original data. These include; available, description and name. Availability of a beer and description contain too many categories and cannot be converted into numeric values for a meaningful analysis. The variables name is a nominal data type that does not influence the IBU of a given beer and contains a large amount of unique categories that would limit analysis.
 
 ```{r}
-sum(is.na(beerdf$glass))
 beerdf_new <- subset(beerdf, select = -c(available, description, glass, name))
 
-#View(beerdf_new)
-#dim(beerdf_new)
-#colnames(beerdf_new)
+View(beerdf_new)
+dim(beerdf_new)
+colnames(beerdf_new)
 ```
 
-Now to run some summary stats
+Now lets run some summary stats on our cleaned data set.
 
 ```{r}
 summary(beerdf_new)
@@ -89,7 +94,24 @@ typeof(beerdf_new)
 ```
 
 ```{r}
+# IBU Histogram
+ggplot(data = beerdf_new, aes(x = ibu)) +
+  geom_histogram(binwidth = 100) +
+  labs(title = "Histogram of IBU", x = "IBU", y = "Count")
+```
 
+```{r}
+ggplot(data = beerdf_new, aes(x = ibu)) +
+  geom_histogram()
+```
+
+From our summary stats and histogram we can observe some potential outliers in our variable IBU. It's first quartile equal to 22 and third quartile equal to 33 with a maximum value of 1,000. Lets compute some boxplots to further analyze the outliers that exist.
+
+```{r}
+# Observing Outliers visullay for IBU using Bolxplot
+ggplot(data = beerdf_new, aes(y = ibu)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of IBU", y = "IBU")
 ```
 
 Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40.
