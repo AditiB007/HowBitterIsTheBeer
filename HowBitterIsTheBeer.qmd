@@ -5,6 +5,22 @@ echo: true
 ---
 
 ```{r}
+library(tidyverse)
+```
+
+```{r}
+blank_theme <- theme_minimal()+
+  theme(
+  axis.title.x = element_blank(),
+  axis.title.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid=element_blank(),
+  axis.ticks = element_blank(),
+  plot.title=element_text(size=14, face="bold")
+  )
+```
+
+```{r}
 beerdf = read.csv("beer_train.csv")
 #head(beerdf)
 View(beerdf)
@@ -56,12 +72,18 @@ summary(beerdf_new)
 ```
 Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40. 
 ```{r}
-sum(beerdf$srm == "Over 40")
+#sum(beerdf$srm == "Over 40")
+srmover40 <- sum(beerdf_new$srm == "Over 40")
+srmothernums <- sum(beerdf_new$srm != "Over 40")
 
-beerdf_new <- ifelse(beerdf_new$srm == "Over 40", "String", "Numerical")
+srmcategcounts <- data.frame(
+  group = c("Over 40", "All other numerical values"),
+  value = c(srmover40, srmothernums)
+  )
 
-class_counts <- table(beerdf_new$srm)
-print(class_counts)
+srmpie <- ggplot(srmcategcounts, aes(x="", y=value, fill=group)) + geom_bar(width = 1, stat = "identity") + coord_polar("y") + scale_fill_brewer(palette = "Pastel1") + blank_theme + theme(axis.text.x=element_blank())
+
+srmpie
 ```
 ```{r}
 hist(beerdf_new$abv, main = "Histogram of ABV", xlab = "ABV", ylab = "Frequency")
