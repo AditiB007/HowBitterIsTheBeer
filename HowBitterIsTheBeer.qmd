@@ -7,15 +7,20 @@ echo: true
 ```{r}
 install.packages("tidyverse")
 library(tidyverse)
+```
+
+```{r}
+install.packages("ggplot2")
+library(ggplot2)
 install.packages("RColorBrewer")
 library(RColorBrewer)
 ```
 
-# **Introduction**
+# Introduction
 
 How Bitter is the Beer is data set provided by Kaggle competition host Dennis Sun. The data set contains 10 variables of 6,000 observations to predict the International Bittering Units (IBU) of a beer. Eights variables are used as potential IBU predictors, while the remaining two are an ID column and IBU. In this report we will conduct an exploratory data analysis examining which predictors we should consider in trying to predict IBU of a given beer.
 
-```
+```         
 blank_theme <- theme_minimal()+
   theme(
   axis.title.x = element_blank(),
@@ -108,8 +113,8 @@ typeof(beerdf_new)
 ```{r}
 # IBU Histogram
 ggplot(data = beerdf_new, aes(x = ibu)) +
-  geom_histogram(binwidth = 50) +
-  labs(title = "Histogram of IBU", x = "IBU", y = "Count")
+  geom_histogram(binwidth = 10) +
+  labs(title = "Histogram of IBU", x = "IBU", y = "Count") + scale_fill_brewer(palette = "Pastel1")
 ```
 
 From our summary statistics and histogram we can observe some potential outliers in our variable IBU. It's first quartile equal to 22 and third quartile equal to 33 with a maximum value of 1,000. Lets compute some boxplots to further analyze the outliers that exist.
@@ -118,7 +123,7 @@ From our summary statistics and histogram we can observe some potential outliers
 # Observing Outliers visullay for IBU using Bolxplot
 ggplot(data = beerdf_new, aes(y = ibu)) +
   geom_boxplot() +
-  labs(title = "Boxplot of IBU", y = "IBU")
+  labs(title = "Boxplot of IBU", y = "IBU") + scale_fill_brewer(palette = "Pastel1")
 ```
 
 ## **Removing Outliers**
@@ -159,14 +164,16 @@ Now lets observe ABV and removing potential outliers. We don't want to completel
 # ABV Histogram
 ggplot(data = beerdf_new, aes(x = abv)) +
   geom_histogram(binwidth = 5) +
-  labs(title = "Histogram of ABV", x = "ABV", y = "Count")
+  labs(title = "Histogram of ABV", x = "ABV", y = "Count") + 
+  scale_fill_brewer(palette = "Pastel1")
 ```
 
 ```{r}
 # Observing Outliers visullay for ABV using Bolxplot
 ggplot(data = beerdf_new, aes(y = abv)) +
   geom_boxplot() +
-  labs(title = "Boxplot of ABV", y = "ABV")
+  labs(title = "Boxplot of ABV", y = "ABV") + 
+  scale_fill_brewer(palette = "Pastel1")
 ```
 
 ```{r}
@@ -201,12 +208,14 @@ Now we will repeat this process for originalGravity
 # OiginalGravity Histogram
 ggplot(data = cleaned_data, aes(x = originalGravity)) +
   geom_histogram(binwidth = .005) +
-  labs(title = "Histogram of originalGravity", x = "originalGravity", y = "Count")
+  labs(title = "Histogram of originalGravity", x = "originalGravity", y = "Count") + 
+  scale_fill_brewer(palette = "Pastel1")
 
 # Observing Outliers visullay for originalGravity using Bolxplot
 ggplot(data = cleaned_data, aes(y = originalGravity)) +
   geom_boxplot() +
-  labs(title = "Boxplot of originalGravity", y = "originalGravity")
+  labs(title = "Boxplot of originalGravity", y = "originalGravity") + 
+  scale_fill_brewer(palette = "Pastel1")
 ```
 
 ```{r}
@@ -246,7 +255,11 @@ srmcategcounts <- data.frame(
   value = c(srmover40, srmothernums)
   )
 
-srmpie <- ggplot(srmcategcounts, aes(x="", y=value, fill=group)) + geom_bar(width = 1, stat = "identity") + coord_polar("y") + scale_fill_brewer(palette = "Pastel1") + blank_theme + theme(axis.text.x=element_blank())
+srmpie <- ggplot(srmcategcounts, aes(x="", y=value, fill=group)) + geom_bar(width = 1, stat = "identity") + 
+coord_polar("y") + 
+scale_fill_brewer(palette = "Pastel1") + 
+blank_theme + 
+theme(axis.text.x=element_blank())
 
 srmpie
 ```
