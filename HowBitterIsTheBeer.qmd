@@ -388,6 +388,8 @@ We can see here that IBU and ABV have a moderate correlation, as well as Origina
 
 ## **Model Testing**
 
+### Full Model
+
 We would like to run a few linear regression models to see which combination of variables is best at predicting IBU. We will start with a full model of all current variables: ABV, SRM, OriginalGravity, isOrganic.
 
 ```{r}
@@ -396,3 +398,22 @@ summary((fullmodel))
 ```
 
 We can see that all input variables have p-values less than .05, and therefore, are significant to the model. However, our $R^2 adjusted$ value is quite low, so we will try to find other combinations of variables that will help raise that value, and in turn show us which combination of variables is best.
+
+### Stepwise Modeling
+
+The stepwise regression model adds predictors one by one so that we can see how much benefit each predictors contributes to the model. First, we make a null model with no predictors to test individual predictors. Then, we make a full model with all predictors to test combinations. Model #1 starts the stepwise function with the null model (no variables), and adds variables one by one with multiple combinations until there are no more benefits observed.
+
+```{r}
+nullmodel <- lm(ibu ~ 1, data = data_clean)
+stepmodel1 <- step(nullmodel, scope = list(lower = nullmodel, upper = fullmodel), direction = "both",test="F")
+summary(stepmodel1)
+```
+
+Now, we see that the model including all variables and excluding isOrganic, is the one providing the most benefits. But we will try another form of stepwise modeling. For Model #2, the opposite of Model #1 is performed. Model #2 starts the stepwise function with the full model (all variables), and removes variables one by one until there are no more benefits observed. 
+
+```{r}
+stepmodel2 <- step(fullmodel, scope = list(lower = nullmodel, upper = fullmodel), direction = "both",test="F")
+summary(stepmodel2)
+```
+
+We see here that we arrive to the same model using a different method. The p-values for each variable are less than .05, showin that they contribute significantly to predicting the output in this model. However, our $R^2 adjusted$ value has not changed. We have found the best possible model using the linear regression method, but it turns out that linear regression may not be the best method for this problem and we may need to try something else. Perhaps, a more complex machine learning algorithm might do the job well.
