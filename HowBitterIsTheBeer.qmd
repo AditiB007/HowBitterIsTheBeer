@@ -7,12 +7,13 @@ echo: true
 ```{r}
 install.packages("tidyverse")
 library(tidyverse)
-install.packages("ggplot2")
-library(ggplot2)
 ```
 
 ```{r}
-
+install.packages("ggplot2")
+library(ggplot2)
+install.packages("RColorBrewer")
+library(RColorBrewer)
 ```
 
 # **Introduction**
@@ -27,7 +28,7 @@ dim(beerdf)
 colnames(beerdf)
 ```
 
-Uploading our data we verify our data dimensions are 6,000x10 with 9 variables (exluding obervation identifier). The 9 variables are:
+Uploading our data we verify our data dimensions are 6,000x10 with 9 variables (excluding observation identifier). The 9 variables are:
 
 abv - Alcohol by Volume (ABV) measures the amount of alcohol in a beverage.
 
@@ -43,15 +44,11 @@ isOrganic - Identifies if the beer is organic by Yes (Y) or No(N).
 
 name - Name of beer brand or beer type when brand is not given.
 
-originalGravity - Original Gravity (OG) measures the density of a beer wort before fermintation.
+originalGravity - Original Gravity (OG) measures the density of a beer wort before fermentation.
 
 srm - Standard Reference Method (SRM) measures a beers color.
 
 # **Data Cleaning**
-
-## Dealing with categorical data
-
-Working with categorical in regards to linear regression is not always
 
 ### Converting Categorical Values to Numerics
 
@@ -75,7 +72,7 @@ View(beerdf)
 
 ### Removing Categorical Variables
 
-Our next step is to remove unnecessary predictors from our data set. By visually observing of our data set we can see the variable glass contains missing values. This seems concerning so we will count the exact number of missing response.
+Our next step is to remove unnecessary predictors from our data set. By visually observtion we can see the variable glass contains missing values. This seems concerning so we will count the exact number of missing response.
 
 ```{r}
 # Number of missing data values in glass 
@@ -94,7 +91,7 @@ dim(beerdf_new)
 colnames(beerdf_new)
 ```
 
-Now lets run some summary stats on our cleaned data set.
+Now lets run some summary stats on our new data set.
 
 ```{r}
 summary(beerdf_new)
@@ -108,7 +105,7 @@ ggplot(data = beerdf_new, aes(x = ibu)) +
   labs(title = "Histogram of IBU", x = "IBU", y = "Count")
 ```
 
-From our summary stats and histogram we can observe some potential outliers in our variable IBU. It's first quartile equal to 22 and third quartile equal to 33 with a maximum value of 1,000. Lets compute some boxplots to further analyze the outliers that exist.
+From our summary statistics and histogram we can observe some potential outliers in our variable IBU. It's first quartile equal to 22 and third quartile equal to 33 with a maximum value of 1,000. Lets compute some boxplots to further analyze the outliers that exist.
 
 ```{r}
 # Observing Outliers visullay for IBU using Bolxplot
@@ -145,7 +142,7 @@ beerdf_new <- beerdf_new[beerdf_new$ibu >= lower_bound & beerdf_new$ibu <= upper
 dim(beerdf_new)
 ```
 
-Dimensions of beerdf_new is now 5,909x6
+The dimensions of our updated data set beerdf_new is now 5,909x6
 
 ```{r}
 #summary(beerdf_new)
@@ -153,7 +150,7 @@ Dimensions of beerdf_new is now 5,909x6
 
 **Removing ABV Outliers**
 
-Now lets observe ABV and removing potential outliers. We don't want to completely eliminate all outliers as they may be rare they may still reveal meaningful insights about our data. From here we will have two data sets. Each data set will have IBU outliers removed but beerdf_new will maintain its current information while cleaned_data will have all outliers removed from ABV, SRM, and OriginalGravity.
+Now lets observe ABV and removing potential outliers. We don't want to completely eliminate all outliers as they may be rare they may still reveal meaningful insights about our data. From here we will have two data sets. Each data set will have IBU outliers removed but beerdf_new will maintain its current information while cleaned_data will have all outliers removed from ABV, SRM, and OriginalGravity. At the end of the this process cleaned_data will be renamed.
 
 ```{r}
 # ABV Histogram
@@ -191,7 +188,7 @@ cleaned_data <- beerdf_new[beerdf_new$abv >= abv_lower_bound & beerdf_new$abv <=
 dim(cleaned_data)
 ```
 
-Dimensions of cleaned_data 5,707x6
+After removing 202 outliers the dimensions of cleaned_data is 5,707x6
 
 **Removing OriginalGravity Outliers**
 
@@ -229,7 +226,7 @@ cleaned_data <- cleaned_data[cleaned_data$originalGravity >= og_lower_bound & cl
 dim(cleaned_data)
 ```
 
-Dimensions of our further cleaned data is 5,544x6
+After removing 163 outlier observations the dimensions of our cleaned data is now 5,544x6
 
 **Removing SRM outliers**
 
@@ -241,7 +238,7 @@ Observing the data set beerdf_new, the variable column srm contains some strings
 # PIE CHART
 ```
 
-We will remove all srm observations with the string 'Over 40'
+From our pie chart we can see that the number of observations 'Over 40' are very small in comparison to our overall data. We will remove all srm observations with the string 'Over 40'
 
 ```{r}
 # Removing values 'Over 40'
@@ -250,7 +247,7 @@ data_clean <- cleaned_data %>%
 dim(data_clean)
 ```
 
-data_clean dimensions 5,371x6
+Before we remove the outliers in SRM we will have to convert our character entries to numerical values.
 
 ```{r}
 # Converting Character values to Numerics
@@ -261,6 +258,8 @@ data_clean$srm <- as.numeric(as.character(data_clean$srm))
 
 str(data_clean$srm)
 ```
+
+Now we will proceed by visualizing our outliers and removing them.
 
 ```{r}
 # SRM Histogram
@@ -293,6 +292,12 @@ length(srm_outliers)
 data_clean <- data_clean[data_clean$srm >= srm_lower_bound & data_clean$srm <= srm_upper_bound, ]
 dim(data_clean)
 ```
+
+Now we are left with two data sets, containing the variables id, abv, ibu, isOrganic, Original gravity and srm.
+
+-   beerdf_new - 5,909x6 data frame with IBU outliers removed
+
+-   data_clean - 4944x6 data frame with all outliers removed
 
 ```{r}
 ```
