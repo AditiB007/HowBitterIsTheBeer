@@ -91,10 +91,10 @@ sum(beerdf$glass == "")
 
 By computing the sum of cells with no response we can observe that there are 2342 missing values for glass type. We will exclude glass as it has over a third missing observations.
 
-In addition we can remove the descriptive and nominal variables from the original data. These include; available, description and name. Availability of a beer and description contain too many categories and cannot be converted into numeric values for a meaningful analysis. The variables name is a nominal data type that does not influence the IBU of a given beer and contains a large amount of unique categories that would limit analysis.
+In addition we can remove the descriptive and nominal variables from the original data. These include; available, description, name, and ID. Availability of a beer and description contain too many categories and cannot be converted into numeric values for a meaningful analysis. The variables name is a nominal data type that does not influence the IBU of a given beer and contains a large amount of unique categories that would limit analysis.
 
 ```{r}
-beerdf_new <- subset(beerdf, select = -c(available, description, glass, name))
+beerdf_new <- subset(beerdf, select = -c(available, description, glass, name, id))
 
 View(beerdf_new)
 dim(beerdf_new)
@@ -385,3 +385,14 @@ ggpairs(data_clean) + scale_color_brewer(palette = "Pastel1")
 ```
 
 We can see here that IBU and ABV have a moderate correlation, as well as OriginalGravity with both IBU and ABV.
+
+## **Model Testing**
+
+We would like to run a few linear regression models to see which combination of variables is best at predicting IBU. We will start with a full model of all current variables: ABV, SRM, OriginalGravity, isOrganic.
+
+```{r}
+fullmodel <- lm(ibu ~ ., data = data_clean)
+summary((fullmodel))
+```
+
+We can see that all input variables have p-values less than .05, and therefore, are significant to the model. However, our $R^2 adjusted$ value is quite low, so we will try to find other combinations of variables that will help raise that value, and in turn show us which combination of variables is best.
