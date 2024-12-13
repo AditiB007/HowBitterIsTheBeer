@@ -49,6 +49,12 @@ srm - Standard Reference Method (SRM) measures a beers color.
 
 # **Data Cleaning**
 
+## Dealing with categorical data
+
+Working with categorical in regards to linear regression is not always
+
+### Converting Categorical Values to Numerics
+
 To conduct a meaning full analysis we will need to convert categorical data to numerical values where appropriate. We will begin by changing "isOrganic" variables to binary variables. All responses labeled as Yes are set equal to 1 and No responses set equal to 0.
 
 -   Yes = 1
@@ -66,6 +72,8 @@ beerdf$isOrganic <- as.numeric(beerdf$isOrganic)
 View(beerdf)
 #table(beerdf$isOrganic)
 ```
+
+### Removing Categorical Variables
 
 Our next step is to remove unnecessary predictors from our data set. By visually observing of our data set we can see the variable glass contains missing values. This seems concerning so we will count the exact number of missing response.
 
@@ -96,13 +104,8 @@ typeof(beerdf_new)
 ```{r}
 # IBU Histogram
 ggplot(data = beerdf_new, aes(x = ibu)) +
-  geom_histogram(binwidth = 100) +
+  geom_histogram(binwidth = 50) +
   labs(title = "Histogram of IBU", x = "IBU", y = "Count")
-```
-
-```{r}
-ggplot(data = beerdf_new, aes(x = ibu)) +
-  geom_histogram()
 ```
 
 From our summary stats and histogram we can observe some potential outliers in our variable IBU. It's first quartile equal to 22 and third quartile equal to 33 with a maximum value of 1,000. Lets compute some boxplots to further analyze the outliers that exist.
@@ -112,6 +115,128 @@ From our summary stats and histogram we can observe some potential outliers in o
 ggplot(data = beerdf_new, aes(y = ibu)) +
   geom_boxplot() +
   labs(title = "Boxplot of IBU", y = "IBU")
+```
+
+## **Removing Outliers**
+
+**Removing IBU Outliers**
+
+From our IBU blox plot we can see that more than one outlier exist. Let's properly identify these outliers. We will remove outliers that fall outside of our upper and lower bounds.
+
+```{r}
+# Constructing our upper and lowerbounds
+Q1 <- quantile(beerdf_new$ibu, 0.25)
+Q3 <- quantile(beerdf_new$ibu, 0.75)
+IQR <- Q3 - Q1
+
+lower_bound <- Q1 - 1.5 * IQR
+upper_bound <- Q3 + 1.5 * IQR
+
+# Identifying our outliers
+outliers <- beerdf_new$ibu[beerdf_new$ibu < lower_bound | beerdf_new$ibu > upper_bound]
+print(outliers)
+length(outliers)
+```
+
+After constructing our bounds we can observe that 91 observations are outliers and removing them will not have a large impact from our original 6,000 observations. Now we will remove our outliers from our data set.
+
+```{r}
+beerdf_new <- beerdf_new[beerdf_new$ibu >= lower_bound & beerdf_new$ibu <= upper_bound, ]
+dim(beerdf_new)
+```
+
+Dimensions of beerdf_new is now 5,909x6
+
+```{r}
+#summary(beerdf_new)
+```
+
+**Removing ABV Outliers**
+
+Now lets observe ABV and removing potential outliers. We don't want to completely eliminate all outliers as they may be rare they may still reveal meaningful insights about our data. From here we will have two data sets. Each data set will have IBU outliers removed but beerdf_new will maintain its current information while cleaned_data will have all outliers removed from ABV, SRM, and OriginalGravity.
+
+```{r}
+# ABV Histogram
+ggplot(data = beerdf_new, aes(x = abv)) +
+  geom_histogram(binwidth = 5) +
+  labs(title = "Histogram of ABV", x = "ABV", y = "Count")
+```
+
+```{r}
+# Observing Outliers visullay for ABV using Bolxplot
+ggplot(data = beerdf_new, aes(y = abv)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of ABV", y = "ABV")
+```
+
+```{r}
+# ABV
+# Constructing our upper and lowerbounds
+abv_Q1 <- quantile(beerdf_new$abv, 0.25)
+abv_Q3 <- quantile(beerdf_new$abv, 0.75)
+abv_IQR <- abv_Q3 - abv_Q1
+
+abv_lower_bound <- abv_Q1 - 1.5 * abv_IQR
+abv_upper_bound <- abv_Q3 + 1.5 * abv_IQR
+
+# Identifying our outliers
+abv_outliers <- beerdf_new$abv[beerdf_new$abv < abv_lower_bound | beerdf_new$abv > abv_upper_bound]
+print(abv_outliers)
+length(abv_outliers) 
+```
+
+```{r}
+# Creating a new data set that has no outliers
+cleaned_data <- beerdf_new[beerdf_new$abv >= abv_lower_bound & beerdf_new$abv <= abv_upper_bound, ]
+dim(cleaned_data)
+```
+
+Dimensions of cleaned_data 5,707x6
+
+**Removing OriginalGravity Outliers**
+
+Now we will repeat this process for originalGravity
+
+```{r}
+# OiginalGravity Histogram
+ggplot(data = cleaned_data, aes(x = originalGravity)) +
+  geom_histogram(binwidth = .005) +
+  labs(title = "Histogram of originalGravity", x = "originalGravity", y = "Count")
+
+# Observing Outliers visullay for originalGravity using Bolxplot
+ggplot(data = cleaned_data, aes(y = originalGravity)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of originalGravity", y = "originalGravity")
+```
+
+```{r}
+# Original Gravity
+# Constructing our upper and lowerbounds
+og_Q1 <- quantile(cleaned_data$originalGravity, 0.25)
+og_Q3 <- quantile(cleaned_data$originalGravity, 0.75)
+og_IQR <- og_Q3 - og_Q1
+
+og_lower_bound <- og_Q1 - 1.5 * og_IQR
+og_upper_bound <- og_Q3 + 1.5 * og_IQR
+
+# Identifying our outliers
+og_outliers <- cleaned_data$originalGravity[cleaned_data$originalGravity < og_lower_bound | cleaned_data$originalGravity > og_upper_bound]
+print(og_outliers)
+length(og_outliers) 
+
+# Further cleaning our data set to remove original Gravity outliers
+cleaned_data <- cleaned_data[cleaned_data$originalGravity >= og_lower_bound & cleaned_data$originalGravity <= og_upper_bound, ]
+dim(cleaned_data)
+```
+
+Dimensions of our further cleaned data is 5,544x6
+
+**Removing SRM outliers**
+
+Lastly we will remove any srm outliers that exist.
+
+```{r}
+
 ```
 
 Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40.
@@ -136,21 +261,4 @@ pie(table(beerdf$srm), names(table(beerdf$srm)))
 ```
 
 ```{r}
-```
-
-```{r}
-boxplot(beerdf_new$abv)
-#hist(beerdf_new$abv, main = "Histogram of ABV", xlab = "ABV", ylab = "Frequency")
-```
-
-```{r}
-boxplot(beerdf_new$ibu)
-#hist(beerdf_new$ibu, main = "Histogram of IBU", xlab = "IBU", ylab = "Frequency")
-```
-
-Generating the IBU histogram, we can observe at least one extream outlier in our data set. We will remove these outliers
-
-```{r}
-ggplot(data = beerdf_new, aes(x = ibu)) +
-  geom_histogram()
 ```
