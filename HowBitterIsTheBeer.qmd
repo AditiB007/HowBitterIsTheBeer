@@ -235,29 +235,66 @@ Dimensions of our further cleaned data is 5,544x6
 
 Lastly we will remove any srm outliers that exist.
 
-```{r}
-
-```
-
 Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40.
 
 ```{r}
-sum(beerdf_new$srm == "Over 40")
+# PIE CHART
+```
+
+We will remove all srm observations with the string 'Over 40'
+
+```{r}
+# Removing values 'Over 40'
+data_clean <- cleaned_data %>%
+  filter(!grepl("Over 40", srm))
+dim(data_clean)
+```
+
+data_clean dimensions 5,371x6
+
+```{r}
+# Converting Character values to Numerics
+str(data_clean$srm)
+
+data_clean$srm <- unlist(data_clean$srm)
+data_clean$srm <- as.numeric(as.character(data_clean$srm))
+
+str(data_clean$srm)
 ```
 
 ```{r}
-# Number of observations in srm with string value "over 40"
-sum(beerdf_new$srm == "Over 40")
+# SRM Histogram
+ggplot(data = data_clean, aes(x = srm)) +
+  geom_histogram(binwidth = 1) +
+  labs(title = "Histogram of SRM", x = "originalGravity", y = "Count")
 
-beerdf_new$srm[which(beerdf_new$srm=="Y")] <- 1
-beerdf_new$isOrganic[which(beerdf_new$isOrganic=="Y")] <- 1
+# Observing Outliers visullay for SRM using Bolxplot
+ggplot(data = data_clean, aes(y = srm)) +
+  geom_boxplot() +
+  labs(title = "Boxplot of SRM", y = "SRM")
+```
 
-#beerdf_new$srm <- as.data.frame(beerdf_new$srm == "Over 40", "String", "Numerical")
+```{r}
+# SRM
+# Constructing our upper and lowerbounds
+srm_Q1 <- quantile(data_clean$srm, 0.25)
+srm_Q3 <- quantile(data_clean$srm, 0.75)
+srm_IQR <- srm_Q3 - srm_Q1
 
-#class_counts <- table(beerdf$srm)
-#print(class_counts)
+srm_lower_bound <- srm_Q1 - 1.5 * srm_IQR
+srm_upper_bound <- srm_Q3 + 1.5 * srm_IQR
 
-pie(table(beerdf$srm), names(table(beerdf$srm)))
+# Identifying our outliers
+srm_outliers <- data_clean$srm[data_clean$srm < srm_lower_bound | data_clean$srm > srm_upper_bound]
+print(srm_outliers)
+length(srm_outliers) 
+
+# Further cleaning our data set to remove SRM outliers
+data_clean <- data_clean[data_clean$srm >= srm_lower_bound & data_clean$srm <= srm_upper_bound, ]
+dim(data_clean)
+```
+
+```{r}
 ```
 
 ```{r}
