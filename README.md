@@ -1,7 +1,7 @@
 # Group Members
 - Aditi Behera
 - Iliana Alvarez
-- 
+  
 # HowBitterIsTheBeer
 This analysis explores key beer characteristics, such as alcohol by volume (ABV), beer color (SRM), and original gravity, to uncover their relationships with IBU and optimize predictive accuracy.
 
