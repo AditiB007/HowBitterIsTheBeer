@@ -5,14 +5,8 @@ echo: true
 ---
 
 ```{r}
-install.packages("tidyverse")
 library(tidyverse)
-```
-
-```{r}
-install.packages("ggplot2")
 library(ggplot2)
-install.packages("RColorBrewer")
 library(RColorBrewer)
 library(gridExtra)
 library(GGally)
