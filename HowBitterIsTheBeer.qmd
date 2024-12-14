@@ -93,7 +93,7 @@ sum(beerdf$glass == "")
 
 By computing the sum of cells with no response we can observe that there are 2342 missing values for glass type. We will exclude glass as it has over a third missing observations.
 
-In addition we can remove the descriptive and nominal variables from the original data. These include; available, description and name. Availability of a beer and description contain too many categories and cannot be converted into numeric values for a meaningful analysis. The variables name is a nominal data type that does not influence the IBU of a given beer and contains a large amount of unique categories that would limit analysis.
+In addition we can remove the descriptive and nominal variables from the original data. These include; id, available, description and name. Id can be removed as Availability of a beer and description contain too many categories and cannot be converted into numeric values for a meaningful analysis. The variables name is a nominal data type that does not influence the IBU of a given beer and contains a large amount of unique categories that would limit analysis.
 
 ```{r}
 beerdf_new <- subset(beerdf, select = -c(available, description, glass, name))
@@ -114,7 +114,8 @@ typeof(beerdf_new)
 # IBU Histogram
 ggplot(data = beerdf_new, aes(x = ibu)) +
   geom_histogram(binwidth = 10) +
-  labs(title = "Histogram of IBU", x = "IBU", y = "Count") + scale_fill_brewer(palette = "Pastel1")
+  labs(title = "Histogram of IBU", x = "IBU", y = "Count") + 
+  scale_color_brewer(palette = "Pastel1")
 ```
 
 From our summary statistics and histogram we can observe some potential outliers in our variable IBU. It's first quartile equal to 22 and third quartile equal to 33 with a maximum value of 1,000. Lets compute some boxplots to further analyze the outliers that exist.
@@ -123,7 +124,8 @@ From our summary statistics and histogram we can observe some potential outliers
 # Observing Outliers visullay for IBU using Bolxplot
 ggplot(data = beerdf_new, aes(y = ibu)) +
   geom_boxplot() +
-  labs(title = "Boxplot of IBU", y = "IBU") + scale_fill_brewer(palette = "Pastel1")
+  labs(title = "Boxplot of IBU", y = "IBU") + 
+  scale_color_brewer(palette = "Pastel1")
 ```
 
 ## **Removing Outliers**
@@ -154,7 +156,7 @@ beerdf_new <- beerdf_new[beerdf_new$ibu >= lower_bound & beerdf_new$ibu <= upper
 dim(beerdf_new)
 ```
 
-The dimensions of our updated data set beerdf_new is now 5,909x6
+The dimensions of our updated data set beerdf_new is now 5,909x5.
 
 **Removing ABV Outliers**
 
@@ -165,7 +167,7 @@ Now lets observe ABV and removing potential outliers. We don't want to completel
 ggplot(data = beerdf_new, aes(x = abv)) +
   geom_histogram(binwidth = 5) +
   labs(title = "Histogram of ABV", x = "ABV", y = "Count") + 
-  scale_fill_brewer(palette = "Pastel1")
+  scale_color_brewer(palette = "Pastel1")
 ```
 
 ```{r}
@@ -173,7 +175,7 @@ ggplot(data = beerdf_new, aes(x = abv)) +
 ggplot(data = beerdf_new, aes(y = abv)) +
   geom_boxplot() +
   labs(title = "Boxplot of ABV", y = "ABV") + 
-  scale_fill_brewer(palette = "Pastel1")
+  scale_color_brewer(palette = "Pastel1")
 ```
 
 ```{r}
@@ -198,7 +200,7 @@ cleaned_data <- beerdf_new[beerdf_new$abv >= abv_lower_bound & beerdf_new$abv <=
 dim(cleaned_data)
 ```
 
-After removing 202 outliers the dimensions of cleaned_data is 5,707x6
+After removing 202 outliers the dimensions of cleaned_data is 5,707x5
 
 **Removing OriginalGravity Outliers**
 
@@ -209,13 +211,13 @@ Now we will repeat this process for originalGravity
 ggplot(data = cleaned_data, aes(x = originalGravity)) +
   geom_histogram(binwidth = .005) +
   labs(title = "Histogram of originalGravity", x = "originalGravity", y = "Count") + 
-  scale_fill_brewer(palette = "Pastel1")
+  scale_color_brewer(palette = "Pastel1")
 
 # Observing Outliers visullay for originalGravity using Bolxplot
 ggplot(data = cleaned_data, aes(y = originalGravity)) +
   geom_boxplot() +
   labs(title = "Boxplot of originalGravity", y = "originalGravity") + 
-  scale_fill_brewer(palette = "Pastel1")
+  scale_color_brewer(palette = "Pastel1")
 ```
 
 ```{r}
@@ -238,7 +240,7 @@ cleaned_data <- cleaned_data[cleaned_data$originalGravity >= og_lower_bound & cl
 dim(cleaned_data)
 ```
 
-After removing 163 outlier observations the dimensions of our cleaned data is now 5,544x6
+After removing 163 outlier observations the dimensions of our cleaned data is now 5,544x5
 
 **Removing SRM outliers**
 
@@ -291,12 +293,14 @@ Now we will proceed by visualizing our outliers and removing them.
 # SRM Histogram
 ggplot(data = data_clean, aes(x = srm)) +
   geom_histogram(binwidth = 1) +
-  labs(title = "Histogram of SRM", x = "originalGravity", y = "Count")
+  labs(title = "Histogram of SRM", x = "originalGravity", y = "Count") +
+  scale_color_brewer(palette = "Pastel1")
 
 # Observing Outliers visullay for SRM using Bolxplot
 ggplot(data = data_clean, aes(y = srm)) +
   geom_boxplot() +
-  labs(title = "Boxplot of SRM", y = "SRM")
+  labs(title = "Boxplot of SRM", y = "SRM") +
+  scale_color_brewer(palette = "Pastel1")
 ```
 
 ```{r}
@@ -319,11 +323,11 @@ data_clean <- data_clean[data_clean$srm >= srm_lower_bound & data_clean$srm <= s
 dim(data_clean)
 ```
 
-Now we are left with two data sets, containing the variables id, abv, ibu, isOrganic, Original gravity and srm.
+Now we are left with two data sets, containing the variables; abv, ibu, isOrganic, Original gravity and srm.
 
--   beerdf_new - 5,909x6 data frame with IBU outliers removed
+-   beerdf_new - 5,909x5 data frame with IBU outliers removed
 
--   data_clean - 4944x6 data frame with all outliers removed
+-   data_clean - 4944x5 data frame with all outliers removed
 
 ```{r}
 ```
