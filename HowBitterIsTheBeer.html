@@ -68,6 +68,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="HowBitterIsTheBeer_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="HowBitterIsTheBeer_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -140,100 +169,147 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ✖ dplyr::lag()    masks stats::lag()
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RColorBrewer)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'gridExtra' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'gridExtra'
+
+The following object is masked from 'package:dplyr':
+
+    combine</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'GGally' was built under R version 4.4.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Registered S3 method overwritten by 'GGally':
+  method from   
+  +.gg   ggplot2</code></pre>
+</div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>blank_theme <span class="ot">&lt;-</span> <span class="fu">theme_minimal</span>()<span class="sc">+</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">panel.grid=</span><span class="fu">element_blank</span>(),</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>, <span class="at">face=</span><span class="st">"bold"</span>)</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>pastel_color <span class="ot">&lt;-</span> <span class="fu">brewer.pal</span>(<span class="at">n =</span> <span class="dv">3</span>, <span class="at">name =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>blank_theme <span class="ot">&lt;-</span> <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.title.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.title.y =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">panel.border =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">panel.grid=</span><span class="fu">element_blank</span>(),</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">axis.ticks =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">plot.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">14</span>, <span class="at">face=</span><span class="st">"bold"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>How Bitter is the Beer is data set provided by Kaggle competition host Dennis Sun. The data set contains 10 variables of 6,000 observations to predict the International Bittering Units (IBU) of a beer. Eights variables are used as potential IBU predictors, while the remaining two are an ID column and IBU. In this report we will conduct an exploratory data analysis examining which predictors we should consider in trying to predict IBU of a given beer.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>beerdf <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"beer_train.csv"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#head(beerdf)</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(beerdf)</span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(beerdf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>beerdf <span class="ot">=</span> <span class="fu">read.csv</span>(<span class="st">"beer_train.csv"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co">#head(beerdf)</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(beerdf)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(beerdf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 6000   10</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(beerdf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(beerdf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "id"              "abv"             "available"       "description"    
  [5] "glass"           "ibu"             "isOrganic"       "name"           
  [9] "originalGravity" "srm"            </code></pre>
 </div>
 </div>
-<p>The data set contains 6,000 observations and 8 variables to predict the International Bittering Units (IBU) of a beer.</p>
-<p>The 9 variables (exluding obervation identifiers) include: - abv - Alcohol by Volume (ABV) measures the amount of alcohol in a beverage. - available - Time of year the beer is available. - description - Description of the beer provided by the makers of the beer. - glass - The type of glass the beer is intended to be served in - ibu - International Bittering Units (IBU) measures the bitterness of beer. - isOrganic - Identifies if the beer is organic by Yes (Y) or No(N). - name - Name of beer brand or beer type when brand is not given. - originalGravity - Original Gravity (OG) measures the density of a beer wort before fermintation. - srm - Standard Reference Method (SRM) measures a beers color.</p>
-<p>We will beging by removing unnessesary predictors from our data set. We can remove the (descriptive data/nominal?) from the original data set such as, available, description, glass and name. These variables contain too many categories and cannot be converted into numerics for a comprehensive analysis. We will exclude glass as it has 2342 missing values, over a third of the observations.</p>
+<p>Uploading our data we verify our data dimensions are 6,000x10 with 9 variables (excluding observation identifier). The 9 variables are:</p>
+<p>abv - Alcohol by Volume (ABV) measures the amount of alcohol in a beverage.</p>
+<p>available - Time of year the beer is available.</p>
+<p>description - Description of the beer provided by the makers of the beer.</p>
+<p>glass - The type of glass the beer is intended to be served in</p>
+<p>ibu - International Bittering Units (IBU) measures the bitterness of beer.</p>
+<p>isOrganic - Identifies if the beer is organic by Yes (Y) or No(N).</p>
+<p>name - Name of beer brand or beer type when brand is not given.</p>
+<p>originalGravity - Original Gravity (OG) measures the density of a beer wort before fermentation.</p>
+<p>srm - Standard Reference Method (SRM) measures a beers color.</p>
+</section>
+<section id="data-cleaning" class="level1">
+<h1><strong>Data Cleaning</strong></h1>
+<section id="converting-categorical-values-to-numerics" class="level3">
+<h3 class="anchored" data-anchor-id="converting-categorical-values-to-numerics">Converting Categorical Values to Numerics</h3>
+<p>To conduct a meaning full analysis we will need to convert categorical data to numerical values where appropriate. We will begin by changing “isOrganic” variables to binary variables. All responses labeled as Yes are set equal to 1 and No responses set equal to 0.</p>
+<ul>
+<li><p>Yes = 1</p></li>
+<li><p>No = 0</p></li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of missing data values in glass </span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(beerdf<span class="sc">$</span>glass <span class="sc">==</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co">#table(beerdf$isOrganic)</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>beerdf<span class="sc">$</span>isOrganic[<span class="fu">which</span>(beerdf<span class="sc">$</span>isOrganic<span class="sc">==</span><span class="st">"Y"</span>)] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>beerdf<span class="sc">$</span>isOrganic[<span class="fu">which</span>(beerdf<span class="sc">$</span>isOrganic<span class="sc">==</span><span class="st">"N"</span>)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>beerdf<span class="sc">$</span>isOrganic <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(beerdf<span class="sc">$</span>isOrganic)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(beerdf)</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co">#table(beerdf$isOrganic)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="removing-categorical-variables" class="level3">
+<h3 class="anchored" data-anchor-id="removing-categorical-variables">Removing Categorical Variables</h3>
+<p>Our next step is to remove unnecessary predictors from our data set. By visually observtion we can see the variable glass contains missing values. This seems concerning so we will count the exact number of missing response.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Number of missing data values in glass </span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(beerdf<span class="sc">$</span>glass <span class="sc">==</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 2342</code></pre>
 </div>
 </div>
+<p>By computing the sum of cells with no response we can observe that there are 2342 missing values for glass type. We will exclude glass as it has over a third missing observations.</p>
+<p>In addition we can remove the descriptive and nominal variables from the original data. These include; ID, available, description and name. ID can be removed as availability of a beer and description contain too many categories and cannot be converted into numeric values for a meaningful analysis. The variables name is a nominal data type that does not influence the IBU of a given beer and contains a large amount of unique categories that would limit analysis.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(beerdf<span class="sc">$</span>glass))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>beerdf_new <span class="ot">&lt;-</span> <span class="fu">subset</span>(beerdf, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(available, description, glass, name, id))</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(beerdf_new)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(beerdf_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0</code></pre>
+<pre><code>[1] 6000    5</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>beerdf_new <span class="ot">&lt;-</span> <span class="fu">subset</span>(beerdf, <span class="at">select =</span> <span class="sc">-</span><span class="fu">c</span>(available, description, glass, name))</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">#View(beerdf_new)</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co">#dim(beerdf_new)</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co">#colnames(beerdf_new)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Next we will change categorical values to numeric values. Changing “isOrganic” variables to binary variables. Yes = 1 and No = 0</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#table(beerdf$isOrganic)</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>beerdf_new<span class="sc">$</span>isOrganic[<span class="fu">which</span>(beerdf_new<span class="sc">$</span>isOrganic<span class="sc">==</span><span class="st">"Y"</span>)] <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>beerdf_new<span class="sc">$</span>isOrganic[<span class="fu">which</span>(beerdf_new<span class="sc">$</span>isOrganic<span class="sc">==</span><span class="st">"N"</span>)] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>beerdf_new<span class="sc">$</span>isOrganic <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(beerdf_new<span class="sc">$</span>isOrganic)</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="fu">View</span>(beerdf_new)</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co">#table(beerdf$isOrganic)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>Now to run some summary stats</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(beerdf_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(beerdf_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>       id            abv              ibu           isOrganic      
- Min.   :   0   Min.   : 0.200   Min.   :   1.0   Min.   :0.00000  
- 1st Qu.:1500   1st Qu.: 5.200   1st Qu.:  22.0   1st Qu.:0.00000  
- Median :3000   Median : 6.000   Median :  33.0   Median :0.00000  
- Mean   :3000   Mean   : 6.502   Mean   :  41.2   Mean   :0.03267  
- 3rd Qu.:4499   3rd Qu.: 7.400   3rd Qu.:  55.0   3rd Qu.:0.00000  
- Max.   :5999   Max.   :19.700   Max.   :1000.0   Max.   :1.00000  
- originalGravity     srm           
- Min.   :1.000   Length:6000       
- 1st Qu.:1.044   Class :character  
- Median :1.050   Mode  :character  
- Mean   :1.054                     
- 3rd Qu.:1.060                     
- Max.   :1.980                     </code></pre>
+<pre><code>[1] "abv"             "ibu"             "isOrganic"       "originalGravity"
+[5] "srm"            </code></pre>
 </div>
 </div>
-<p>Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40.</p>
+<p>Now lets run some summary stats on our new data set.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">#sum(beerdf$srm == "Over 40")</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>srmover40 <span class="ot">&lt;-</span> <span class="fu">sum</span>(beerdf_new<span class="sc">$</span>srm <span class="sc">==</span> <span class="st">"Over 40"</span>)</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>srmothernums <span class="ot">&lt;-</span> <span class="fu">sum</span>(beerdf_new<span class="sc">$</span>srm <span class="sc">!=</span> <span class="st">"Over 40"</span>)</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>srmcategcounts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">c</span>(<span class="st">"Over 40"</span>, <span class="st">"All other numerical values"</span>),</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(srmover40, srmothernums)</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>srmpie <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(srmcategcounts, <span class="fu">aes</span>(<span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span>value, <span class="at">fill=</span>group)) <span class="sc">+</span> <span class="fu">geom_bar</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span> <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>) <span class="sc">+</span> blank_theme <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_blank</span>())</span>
-<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>srmpie</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(beerdf_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      abv              ibu           isOrganic       originalGravity
+ Min.   : 0.200   Min.   :   1.0   Min.   :0.00000   Min.   :1.000  
+ 1st Qu.: 5.200   1st Qu.:  22.0   1st Qu.:0.00000   1st Qu.:1.044  
+ Median : 6.000   Median :  33.0   Median :0.00000   Median :1.050  
+ Mean   : 6.502   Mean   :  41.2   Mean   :0.03267   Mean   :1.054  
+ 3rd Qu.: 7.400   3rd Qu.:  55.0   3rd Qu.:0.00000   3rd Qu.:1.060  
+ Max.   :19.700   Max.   :1000.0   Max.   :1.00000   Max.   :1.980  
+     srm           
+ Length:6000       
+ Class :character  
+ Mode  :character  
+                   
+                   
+                   </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="fu">typeof</span>(beerdf_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "list"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># IBU Histogram</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> beerdf_new, <span class="fu">aes</span>(<span class="at">x =</span> ibu)) <span class="sc">+</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">10</span>, <span class="at">fill =</span> pastel_color[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of IBU"</span>, <span class="at">x =</span> <span class="st">"IBU"</span>, <span class="at">y =</span> <span class="st">"Count"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -242,8 +318,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+<p>From our summary statistics and histogram we can observe some potential outliers in our variable IBU. It’s first quartile equal to 22 and third quartile equal to 33 with a maximum value of 1,000. Lets compute some boxplots to further analyze the outliers that exist.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(beerdf_new<span class="sc">$</span>abv, <span class="at">main =</span> <span class="st">"Histogram of ABV"</span>, <span class="at">xlab =</span> <span class="st">"ABV"</span>, <span class="at">ylab =</span> <span class="st">"Frequency"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Observing Outliers visually for IBU using Boxplot</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> beerdf_new, <span class="fu">aes</span>(<span class="at">y =</span> ibu)) <span class="sc">+</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> pastel_color[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of IBU"</span>, <span class="at">y =</span> <span class="st">"IBU"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -252,6 +332,582 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </div>
+</section>
+<section id="removing-outliers" class="level2">
+<h2 class="anchored" data-anchor-id="removing-outliers"><strong>Removing Outliers</strong></h2>
+<p><strong>Removing IBU Outliers</strong></p>
+<p>From our IBU blox plot we can see that more than one outlier exist. Let’s properly identify these outliers. We will remove outliers that fall outside of our upper and lower bounds.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Constructing our upper and lowerbounds</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>Q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(beerdf_new<span class="sc">$</span>ibu, <span class="fl">0.25</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>Q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(beerdf_new<span class="sc">$</span>ibu, <span class="fl">0.75</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>IQR <span class="ot">&lt;-</span> Q3 <span class="sc">-</span> Q1</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>lower_bound <span class="ot">&lt;-</span> Q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> IQR</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>upper_bound <span class="ot">&lt;-</span> Q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> IQR</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying our outliers</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>outliers <span class="ot">&lt;-</span> beerdf_new<span class="sc">$</span>ibu[beerdf_new<span class="sc">$</span>ibu <span class="sc">&lt;</span> lower_bound <span class="sc">|</span> beerdf_new<span class="sc">$</span>ibu <span class="sc">&gt;</span> upper_bound]</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(outliers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1]  113.0  186.0  130.0  132.0  110.0  122.9  180.0  105.0  120.0  118.0
+[11]  108.0  110.0  134.0  117.0  118.0  108.0  127.0  115.0  127.0  112.0
+[21]  120.0  115.0  105.0  105.0  111.0  130.0  135.0  430.0  110.0  112.0
+[31]  130.0  110.0  118.0  110.0  127.0  110.0  130.0  130.0  110.0  113.0
+[41]  120.0  144.0  125.0  110.0  125.0  115.0  119.0  105.0  106.0  106.0
+[51]  106.0  108.0  131.0  330.0  116.0  121.0  175.0  120.0  120.0  118.0
+[61]  120.0  120.0  167.0  175.0  126.0  120.0  143.0  108.0  200.0  126.0
+[71]  168.0  110.0  105.0  156.0  150.0  122.0  105.0 1000.0  120.0  114.0
+[81]  168.0  150.0  120.0  110.0  105.0  150.0  118.0  200.0  135.0  112.0
+[91]  114.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(outliers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 91</code></pre>
+</div>
+</div>
+<p>After constructing our bounds we can observe that 91 observations are outliers and removing them will not have a large impact from our original 6,000 observations. Now we will remove our outliers from our data set.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>beerdf_new <span class="ot">&lt;-</span> beerdf_new[beerdf_new<span class="sc">$</span>ibu <span class="sc">&gt;=</span> lower_bound <span class="sc">&amp;</span> beerdf_new<span class="sc">$</span>ibu <span class="sc">&lt;=</span> upper_bound, ]</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(beerdf_new)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5909    5</code></pre>
+</div>
+</div>
+<p>The dimensions of our updated data set beerdf_new is now 5,909x5.</p>
+<p><strong>Removing ABV Outliers</strong></p>
+<p>Now lets observe ABV and removing potential outliers. We don’t want to completely eliminate all outliers as they may be rare they may still reveal meaningful insights about our data. From here we will have two data sets. Each data set will have IBU outliers removed but beerdf_new will maintain its current information while cleaned_data will have all outliers removed from ABV, SRM, and OriginalGravity. At the end of the this process cleaned_data will be renamed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ABV Histogram</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> beerdf_new, <span class="fu">aes</span>(<span class="at">x =</span> abv)) <span class="sc">+</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">5</span>, <span class="at">fill =</span> pastel_color[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of ABV"</span>, <span class="at">x =</span> <span class="st">"ABV"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Observing Outliers visullay for ABV using Bolxplot</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> beerdf_new, <span class="fu">aes</span>(<span class="at">y =</span> abv)) <span class="sc">+</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> pastel_color[<span class="dv">3</span>]) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of ABV"</span>, <span class="at">y =</span> <span class="st">"ABV"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ABV</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Constructing our upper and lowerbounds</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>abv_Q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(beerdf_new<span class="sc">$</span>abv, <span class="fl">0.25</span>)</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>abv_Q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(beerdf_new<span class="sc">$</span>abv, <span class="fl">0.75</span>)</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>abv_IQR <span class="ot">&lt;-</span> abv_Q3 <span class="sc">-</span> abv_Q1</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true" tabindex="-1"></a>abv_lower_bound <span class="ot">&lt;-</span> abv_Q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> abv_IQR</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true" tabindex="-1"></a>abv_upper_bound <span class="ot">&lt;-</span> abv_Q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> abv_IQR</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying our outliers</span></span>
+<span id="cb45-11"><a href="#cb45-11" aria-hidden="true" tabindex="-1"></a>abv_outliers <span class="ot">&lt;-</span> beerdf_new<span class="sc">$</span>abv[beerdf_new<span class="sc">$</span>abv <span class="sc">&lt;</span> abv_lower_bound <span class="sc">|</span> beerdf_new<span class="sc">$</span>abv <span class="sc">&gt;</span> abv_upper_bound]</span>
+<span id="cb45-12"><a href="#cb45-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(abv_outliers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  0.20 13.50 11.00 10.70 13.80 11.00 11.00 11.00 11.50 11.80 12.00 11.50
+ [13] 12.80 11.00 11.50 12.00 13.00 12.00 11.00 14.60 15.80 12.00 10.50 10.80
+ [25] 11.50 10.50 10.50 13.00 10.50 10.90 11.50 11.00 18.00 10.90 10.50 10.50
+ [37] 11.50 11.00 13.70 11.10 11.50 10.60 14.10 12.20 10.50 16.50 10.50 13.40
+ [49] 11.00 11.20  0.40 10.70 11.40 11.30 18.00 10.50 14.50 10.90 10.50 11.50
+ [61] 13.50 10.80 10.40 11.75 11.00 14.00 10.50 10.90 12.70 11.00 11.40 12.50
+ [73] 11.00 11.30 14.20 13.80 10.80 10.50 11.20 11.00 10.50 11.00 10.60 11.00
+ [85] 11.00 11.00 10.60 12.10 14.50 13.30 11.00 12.50 10.40 13.40 10.70 11.00
+ [97] 11.00 11.90 12.50 11.50 11.00 15.10 11.60 11.50 10.40 11.20 10.50 10.40
+[109] 10.80 11.50 10.80 10.50 10.50 12.00 11.90 10.50 12.80 12.00 10.40 10.80
+[121] 11.00 11.00 11.00 11.20 10.50 12.50 11.20 12.40 13.70 11.20 11.20 10.80
+[133] 12.00 12.80 11.00 11.00 10.50 11.00 12.00 13.00 19.70 10.40 10.50 10.50
+[145] 13.00 11.50 11.50 10.40 12.20 10.70 12.00 10.60 11.00 11.00 11.00 11.40
+[157] 11.80 12.40 11.40 12.00 11.20 13.00 10.50 11.00 12.70 11.00 14.50 10.50
+[169] 11.00 13.40 12.50 10.80 14.00 13.80 12.00 18.00 10.50 11.50 10.60 11.00
+[181] 16.83 10.50 11.00 11.50 11.00 11.10 11.60 11.00 12.00 16.00 13.00 10.50
+[193] 11.00 10.80 11.00 11.70 10.70 11.03 10.50  1.60 11.00 11.00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(abv_outliers) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 202</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a new data set that has no outliers</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> beerdf_new[beerdf_new<span class="sc">$</span>abv <span class="sc">&gt;=</span> abv_lower_bound <span class="sc">&amp;</span> beerdf_new<span class="sc">$</span>abv <span class="sc">&lt;=</span> abv_upper_bound, ]</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(cleaned_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5707    5</code></pre>
+</div>
+</div>
+<p>After removing 202 outliers the dimensions of cleaned_data is 5,707x5</p>
+<p><strong>Removing OriginalGravity Outliers</strong></p>
+<p>Now we will repeat this process for originalGravity</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># OiginalGravity Histogram</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cleaned_data, <span class="fu">aes</span>(<span class="at">x =</span> originalGravity)) <span class="sc">+</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> .<span class="dv">005</span>, <span class="at">fill =</span> pastel_color[<span class="dv">2</span>]) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of originalGravity"</span>, <span class="at">x =</span> <span class="st">"originalGravity"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Observing Outliers visullay for originalGravity using Bolxplot</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> cleaned_data, <span class="fu">aes</span>(<span class="at">y =</span> originalGravity)) <span class="sc">+</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> pastel_color[<span class="dv">5</span>]) <span class="sc">+</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of originalGravity"</span>, <span class="at">y =</span> <span class="st">"originalGravity"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-16-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Original Gravity</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Constructing our upper and lowerbounds</span></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>og_Q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(cleaned_data<span class="sc">$</span>originalGravity, <span class="fl">0.25</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>og_Q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(cleaned_data<span class="sc">$</span>originalGravity, <span class="fl">0.75</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>og_IQR <span class="ot">&lt;-</span> og_Q3 <span class="sc">-</span> og_Q1</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>og_lower_bound <span class="ot">&lt;-</span> og_Q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> og_IQR</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>og_upper_bound <span class="ot">&lt;-</span> og_Q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> og_IQR</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying our outliers</span></span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true" tabindex="-1"></a>og_outliers <span class="ot">&lt;-</span> cleaned_data<span class="sc">$</span>originalGravity[cleaned_data<span class="sc">$</span>originalGravity <span class="sc">&lt;</span> og_lower_bound <span class="sc">|</span> cleaned_data<span class="sc">$</span>originalGravity <span class="sc">&gt;</span> og_upper_bound]</span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(og_outliers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1] 1.09200 1.08800 1.00000 1.00000 1.01200 1.08500 1.09000 1.08700 1.08800
+ [10] 1.09000 1.01200 1.09500 1.09100 1.08800 1.01600 1.01200 1.08500 1.08500
+ [19] 1.00700 1.08500 1.09000 1.09000 1.09000 1.08500 1.08800 1.09000 1.08500
+ [28] 1.01000 1.08900 1.09600 1.09500 1.08800 1.08700 1.08500 1.09200 1.08500
+ [37] 1.01000 1.08530 1.10000 1.00400 1.08800 1.09200 1.09500 1.08800 1.09000
+ [46] 1.09000 1.09000 1.08800 1.09000 1.09800 1.08800 1.09000 1.00900 1.00900
+ [55] 1.08800 1.08500 1.10100 1.09000 1.09100 1.09900 1.00600 1.10200 1.09200
+ [64] 1.09200 1.08500 1.09900 1.09000 1.09300 1.10700 1.11000 1.08500 1.09000
+ [73] 1.09000 1.08700 1.01200 1.08700 1.09000 1.09200 1.09000 1.08500 1.08800
+ [82] 1.09210 1.08800 1.09000 1.98000 1.08700 1.09500 1.09300 1.09800 1.09900
+ [91] 1.08500 1.10600 1.09200 1.08900 1.72000 1.08700 1.09000 1.35500 1.10100
+[100] 1.08800 1.09000 1.10800 1.09600 1.09660 1.01500 1.08700 1.08500 1.08700
+[109] 1.08800 1.09000 1.09700 1.09000 1.10000 1.08500 1.08800 1.08500 1.01800
+[118] 1.09400 1.09000 1.08600 1.08900 1.01000 1.09300 1.08500 1.09000 1.09000
+[127] 1.08700 1.09000 1.01000 1.08800 1.10700 1.09100 1.09000 1.00800 1.08700
+[136] 1.09000 1.08800 1.09000 1.10100 1.09890 1.09000 1.09600 1.09000 1.09000
+[145] 1.09800 1.08800 1.01300 1.09000 1.08800 1.09000 1.09000 1.09000 1.08500
+[154] 1.09000 1.09200 1.08500 1.08500 1.09200 1.01200 1.00405 1.09000 1.09000
+[163] 1.09000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(og_outliers) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 163</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Further cleaning our data set to remove original Gravity outliers</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>cleaned_data <span class="ot">&lt;-</span> cleaned_data[cleaned_data<span class="sc">$</span>originalGravity <span class="sc">&gt;=</span> og_lower_bound <span class="sc">&amp;</span> cleaned_data<span class="sc">$</span>originalGravity <span class="sc">&lt;=</span> og_upper_bound, ]</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(cleaned_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5544    5</code></pre>
+</div>
+</div>
+<p>After removing 163 outlier observations the dimensions of our cleaned data is now 5,544x5</p>
+<p><strong>Removing SRM outliers</strong></p>
+<p>Lastly we will remove any srm outliers that exist.</p>
+<p>Observing the data set beerdf_new, the variable column srm contains some strings where srm is over 40. To determine if removing these data is resonable we will make a pie chart showing the ratio of values that are numerical and the amount that are strings representing srm over 40.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>srmover40 <span class="ot">&lt;-</span> <span class="fu">sum</span>(beerdf_new<span class="sc">$</span>srm <span class="sc">==</span> <span class="st">"Over 40"</span>)</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>srmothernums <span class="ot">&lt;-</span> <span class="fu">sum</span>(beerdf_new<span class="sc">$</span>srm <span class="sc">!=</span> <span class="st">"Over 40"</span>)</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>srmcategcounts <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">group =</span> <span class="fu">c</span>(<span class="st">"Over 40"</span>, <span class="st">"All other numerical values"</span>),</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">value =</span> <span class="fu">c</span>(srmover40, srmothernums)</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(srmcategcounts, <span class="fu">aes</span>(<span class="at">x=</span><span class="st">""</span>, <span class="at">y=</span>value, <span class="at">fill=</span>group)) <span class="sc">+</span></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">width =</span> <span class="dv">1</span>, <span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span> <span class="fu">coord_polar</span>(<span class="st">"y"</span>) <span class="sc">+</span></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>) <span class="sc">+</span> blank_theme <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x=</span><span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>From our pie chart we can see that the number of observations ‘Over 40’ are very small in comparison to our overall data. We will remove all srm observations with the string ‘Over 40’</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing values 'Over 40'</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> cleaned_data <span class="sc">%&gt;%</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">grepl</span>(<span class="st">"Over 40"</span>, srm))</span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5371    5</code></pre>
+</div>
+</div>
+<p>Before we remove the outliers in SRM we will have to convert our character entries to numerical values.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting Character values to Numerics</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_clean<span class="sc">$</span>srm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> chr [1:5371] "8" "35" "10" "5" "3" "7" "11" "2" "14" "4" "7" "40" "15" ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>data_clean<span class="sc">$</span>srm <span class="ot">&lt;-</span> <span class="fu">unlist</span>(data_clean<span class="sc">$</span>srm)</span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>data_clean<span class="sc">$</span>srm <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(data_clean<span class="sc">$</span>srm))</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data_clean<span class="sc">$</span>srm)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> num [1:5371] 8 35 10 5 3 7 11 2 14 4 ...</code></pre>
+</div>
+</div>
+<p>Now we will proceed by visualizing our outliers and removing them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SRM Histogram</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> data_clean, <span class="fu">aes</span>(<span class="at">x =</span> srm)) <span class="sc">+</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>, <span class="at">fill =</span> pastel_color[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of SRM"</span>, <span class="at">x =</span> <span class="st">"originalGravity"</span>, <span class="at">y =</span> <span class="st">"Count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Observing Outliers visullay for SRM using Bolxplot</span></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> data_clean, <span class="fu">aes</span>(<span class="at">y =</span> srm)) <span class="sc">+</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> pastel_color[<span class="dv">1</span>]) <span class="sc">+</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Boxplot of SRM"</span>, <span class="at">y =</span> <span class="st">"SRM"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-21-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="co"># SRM</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Constructing our upper and lowerbounds</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>srm_Q1 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(data_clean<span class="sc">$</span>srm, <span class="fl">0.25</span>)</span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>srm_Q3 <span class="ot">&lt;-</span> <span class="fu">quantile</span>(data_clean<span class="sc">$</span>srm, <span class="fl">0.75</span>)</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>srm_IQR <span class="ot">&lt;-</span> srm_Q3 <span class="sc">-</span> srm_Q1</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a>srm_lower_bound <span class="ot">&lt;-</span> srm_Q1 <span class="sc">-</span> <span class="fl">1.5</span> <span class="sc">*</span> srm_IQR</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a>srm_upper_bound <span class="ot">&lt;-</span> srm_Q3 <span class="sc">+</span> <span class="fl">1.5</span> <span class="sc">*</span> srm_IQR</span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying our outliers</span></span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true" tabindex="-1"></a>srm_outliers <span class="ot">&lt;-</span> data_clean<span class="sc">$</span>srm[data_clean<span class="sc">$</span>srm <span class="sc">&lt;</span> srm_lower_bound <span class="sc">|</span> data_clean<span class="sc">$</span>srm <span class="sc">&gt;</span> srm_upper_bound]</span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(srm_outliers)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  [1]  40  98  40  40 100  40  45  38  40  47  37  40  49  40  40  40  40  40
+ [19]  40  40  38  40  40  40  40  40  41  40  40  50  37  37  40  40  40  40
+ [37]  40  40  40  39  40  40  38  40  40  40  39  40  40  40  37  40  40  40
+ [55]  40  40  40  48  40  40  39  44  40  40  40  40  41  40  40  40  40  40
+ [73]  40  40  40  37  37  40  40  71  40  47  48  39  40  40  40  40  40  40
+ [91]  40  40  40  57  40  48  40  40  40  40  40  40  40  37  40  40  40  40
+[109]  40  40  37  40  38  50  40  38  40  40  40  40  40  40  40  40  94  40
+[127]  40  40  40  40  40  42  42  40  40  40  40  40  40  40  40  40  40  40
+[145]  40  40  40  49  40  37  40  40  40  40  43  40  40  40  46  47  53  40
+[163]  40  38  40  40  50  40  87  41  40  44  40  37  37  40  40  40  40  40
+[181]  47  41  37  40  40  39  40  40  40  62  38  40  66  40  40  39  40  40
+[199]  40  38  98  40  40  95  38  40  40  40  40  40  40  40  40  40  74  40
+[217]  40  40  72  46  40  40  92  86  40  40  40  40  40  57  37  39  38  63
+[235]  40  40  40  40  86  40  40  40  40  38  40  40  40  40  40  37  98  40
+[253]  40  40  40  39  40  40  40  40  40  37  47  57  40  44  40  64  40  37
+[271]  39  40  40  45  40  40  99  40  40  40  39  48  40  49  40  40  37  45
+[289]  39  38  39  40  40  40  40  40  37  40  40  40  40  87  40  38  40  37
+[307]  40  40  40  40  46  37  40  40  40  40  40  41  37  38  37  91  40  40
+[325]  40  40  40  40  40  40  40  40  40  40  40  39  40  40  39  40  40  40
+[343]  40  40  40  40  40  40  40  40  40  40  40  40  40  37  40  40  49  40
+[361]  38  40 100  50  40  40  40  40  47  93  40  40  40  39  38  44  40  40
+[379]  40  40  45  75  40  40  40  40  38  40  40  40  40  38  40  38  42  58
+[397]  41  40  38  85  40  40  81  40  38  40  40  37  40  40  38  39  49  40
+[415]  40  40  39  48  37  40  40  64  40  37  40  40  40</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="fu">length</span>(srm_outliers) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 427</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Further cleaning our data set to remove SRM outliers</span></span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a>data_clean <span class="ot">&lt;-</span> data_clean[data_clean<span class="sc">$</span>srm <span class="sc">&gt;=</span> srm_lower_bound <span class="sc">&amp;</span> data_clean<span class="sc">$</span>srm <span class="sc">&lt;=</span> srm_upper_bound, ]</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4944    5</code></pre>
+</div>
+</div>
+<p>Now we are left with two data sets, containing the variables; abv, ibu, isOrganic, Original gravity and srm.</p>
+<ul>
+<li>beerdf_new - 5,909x5 data frame with IBU outliers removed</li>
+<li>data_clean - 4,944x6 data frame with all outliers removed</li>
+</ul>
+</section>
+</section>
+<section id="linear-regression" class="level1">
+<h1><strong>Linear Regression</strong></h1>
+<section id="correlation-of-individual-variables" class="level2">
+<h2 class="anchored" data-anchor-id="correlation-of-individual-variables"><strong>Correlation of Individual Variables</strong></h2>
+<section id="scatterplots" class="level3">
+<h3 class="anchored" data-anchor-id="scatterplots">Scatterplots</h3>
+<p>We’d like to build a linear regression model in order to work towards predicting IBU. Before we begin that, we should check for correlations between vraibles. We will build scatterplots for both the dataset with and without the IBU outliers to check if removing those outliers makes a grand difference.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>sp1_new <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(beerdf_new, <span class="fu">aes</span>(<span class="at">x =</span> abv, <span class="at">y =</span> ibu, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"IBU vs ABV (beerdf_new)"</span>, <span class="at">x =</span> <span class="st">"Alcohol by Volume (ABV)"</span>, <span class="at">y =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>sp2_new <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(beerdf_new, <span class="fu">aes</span>(<span class="at">x =</span> originalGravity, <span class="at">y =</span> ibu, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"IBU vs Original Gravity (beerdf_new)"</span>, <span class="at">x =</span> <span class="st">"Original Gravity"</span>, <span class="at">y =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb74-9"><a href="#cb74-9" aria-hidden="true" tabindex="-1"></a>sp3_new <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(beerdf_new, <span class="fu">aes</span>(<span class="at">x =</span> srm, <span class="at">y =</span> ibu, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb74-10"><a href="#cb74-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb74-11"><a href="#cb74-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"IBU vs SRM (beerdf_new)"</span>, <span class="at">x =</span> <span class="st">"SRM (Beer Color)"</span>, <span class="at">y =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb74-12"><a href="#cb74-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb74-13"><a href="#cb74-13" aria-hidden="true" tabindex="-1"></a>sp4_new <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(beerdf_new, <span class="fu">aes</span>(<span class="at">x =</span> abv, <span class="at">y =</span> srm, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb74-14"><a href="#cb74-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb74-15"><a href="#cb74-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SRM vs ABV (beerdf_new)"</span>, <span class="at">x =</span> <span class="st">"Alcohol by Volume (ABV)"</span>, <span class="at">y =</span> <span class="st">"SRM (Beer Color)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb74-16"><a href="#cb74-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb74-17"><a href="#cb74-17" aria-hidden="true" tabindex="-1"></a>sp5_new <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(beerdf_new, <span class="fu">aes</span>(<span class="at">x =</span> ibu, <span class="at">y =</span> srm, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb74-18"><a href="#cb74-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb74-19"><a href="#cb74-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SRM vs IBU (beerdf_new)"</span>, <span class="at">x =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">y =</span> <span class="st">"SRM (Beer Color)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb74-20"><a href="#cb74-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb74-21"><a href="#cb74-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-22"><a href="#cb74-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plots for beerdf_new</span></span>
+<span id="cb74-23"><a href="#cb74-23" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(sp1_new, sp2_new, sp3_new, sp4_new, sp5_new, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualizations for data_clean</span></span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>sp1_clean <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_clean, <span class="fu">aes</span>(<span class="at">x =</span> abv, <span class="at">y =</span> ibu, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"IBU vs ABV (data_clean)"</span>, <span class="at">x =</span> <span class="st">"Alcohol by Volume (ABV)"</span>, <span class="at">y =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>sp2_clean <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_clean, <span class="fu">aes</span>(<span class="at">x =</span> originalGravity, <span class="at">y =</span> ibu, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"IBU vs Original Gravity (data_clean)"</span>, <span class="at">x =</span> <span class="st">"Original Gravity"</span>, <span class="at">y =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a>sp3_clean <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_clean, <span class="fu">aes</span>(<span class="at">x =</span> srm, <span class="at">y =</span> ibu, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"IBU vs SRM (data_clean)"</span>, <span class="at">x =</span> <span class="st">"SRM (Beer Color)"</span>, <span class="at">y =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb75-13"><a href="#cb75-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb75-14"><a href="#cb75-14" aria-hidden="true" tabindex="-1"></a>sp4_clean <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_clean, <span class="fu">aes</span>(<span class="at">x =</span> abv, <span class="at">y =</span> srm, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb75-15"><a href="#cb75-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb75-16"><a href="#cb75-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SRM vs ABV (data_clean)"</span>, <span class="at">x =</span> <span class="st">"Alcohol by Volume (ABV)"</span>, <span class="at">y =</span> <span class="st">"SRM (Beer Color)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb75-17"><a href="#cb75-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb75-18"><a href="#cb75-18" aria-hidden="true" tabindex="-1"></a>sp5_clean <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(data_clean, <span class="fu">aes</span>(<span class="at">x =</span> ibu, <span class="at">y =</span> srm, <span class="at">color =</span> <span class="fu">factor</span>(isOrganic))) <span class="sc">+</span></span>
+<span id="cb75-19"><a href="#cb75-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb75-20"><a href="#cb75-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"SRM vs IBU (data_clean)"</span>, <span class="at">x =</span> <span class="st">"Bitterness (IBU)"</span>, <span class="at">y =</span> <span class="st">"SRM (Beer Color)"</span>, <span class="at">color =</span> <span class="st">"Is Organic"</span>) <span class="sc">+</span> </span>
+<span id="cb75-21"><a href="#cb75-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span>
+<span id="cb75-22"><a href="#cb75-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb75-23"><a href="#cb75-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plots for data_clean</span></span>
+<span id="cb75-24"><a href="#cb75-24" aria-hidden="true" tabindex="-1"></a><span class="fu">grid.arrange</span>(sp1_clean, sp2_clean, sp3_clean, sp4_clean, sp5_clean, <span class="at">ncol =</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now, we can see that removing the IBU outliers does make a difference on how the variables correlate with each other. However, there don’t seem to be any clear patterns between the variables, seemingly very random. We will use the dataset with no IBU outliers from here on out.</p>
+</section>
+<section id="multicollinearity-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="multicollinearity-analysis">Multicollinearity Analysis</h3>
+<p>In order to test if any pairs of variables are significantly correlated, we will plot every combination of variables together. We are trying to see if any of the variables we will utilize for the output are correlated with each other.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(data_clean) <span class="sc">+</span> <span class="fu">scale_color_brewer</span>(<span class="at">palette =</span> <span class="st">"Pastel1"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="HowBitterIsTheBeer_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can see here that IBU and ABV have a moderate correlation, as well as OriginalGravity with both IBU and ABV.</p>
+</section>
+</section>
+<section id="model-testing" class="level2">
+<h2 class="anchored" data-anchor-id="model-testing"><strong>Model Testing</strong></h2>
+<section id="full-model" class="level3">
+<h3 class="anchored" data-anchor-id="full-model">Full Model</h3>
+<p>We would like to run a few linear regression models to see which combination of variables is best at predicting IBU. We will start with a full model of all current variables: ABV, SRM, OriginalGravity, isOrganic.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>fullmodel <span class="ot">&lt;-</span> <span class="fu">lm</span>(ibu <span class="sc">~</span> ., <span class="at">data =</span> data_clean)</span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>((fullmodel))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ibu ~ ., data = data_clean)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-61.721 -12.550  -1.464  12.407  79.108 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     -579.79123   28.04096 -20.677  &lt; 2e-16 ***
+abv                5.83438    0.24729  23.593  &lt; 2e-16 ***
+isOrganic          0.80080    1.46204   0.548    0.584    
+originalGravity  555.84791   27.48419  20.224  &lt; 2e-16 ***
+srm               -0.15921    0.03329  -4.783 1.78e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 18.78 on 4939 degrees of freedom
+Multiple R-squared:  0.329, Adjusted R-squared:  0.3284 
+F-statistic: 605.3 on 4 and 4939 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>We can see that all input variables have p-values less than .05, and therefore, are significant to the model. However, our <span class="math inline">\(R^2 adjusted\)</span> value is quite low, so we will try to find other combinations of variables that will help raise that value, and in turn show us which combination of variables is best.</p>
+</section>
+<section id="stepwise-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="stepwise-modeling">Stepwise Modeling</h3>
+<p>The stepwise regression model adds predictors one by one so that we can see how much benefit each predictors contributes to the model. First, we make a null model with no predictors to test individual predictors. Then, we make a full model with all predictors to test combinations. Model #1 starts the stepwise function with the null model (no variables), and adds variables one by one with multiple combinations until there are no more benefits observed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>nullmodel <span class="ot">&lt;-</span> <span class="fu">lm</span>(ibu <span class="sc">~</span> <span class="dv">1</span>, <span class="at">data =</span> data_clean)</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>stepmodel1 <span class="ot">&lt;-</span> <span class="fu">step</span>(nullmodel, <span class="at">scope =</span> <span class="fu">list</span>(<span class="at">lower =</span> nullmodel, <span class="at">upper =</span> fullmodel), <span class="at">direction =</span> <span class="st">"both"</span>,<span class="at">test=</span><span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=30969.63
+ibu ~ 1
+
+                  Df Sum of Sq     RSS   AIC   F value  Pr(&gt;F)    
++ abv              1    694486 1901842 29433 1804.6454 &lt; 2e-16 ***
++ originalGravity  1    657584 1938744 29528 1676.2303 &lt; 2e-16 ***
++ srm              1      1450 2594878 30969    2.7622 0.09658 .  
+&lt;none&gt;                         2596329 30970                      
++ isOrganic        1       721 2595608 30970    1.3730 0.24135    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Step:  AIC=29432.68
+ibu ~ abv
+
+                  Df Sum of Sq     RSS   AIC   F value    Pr(&gt;F)    
++ originalGravity  1    151424 1750418 29025  427.4337 &lt; 2.2e-16 ***
++ srm              1     15088 1886755 29395   39.5119 3.541e-10 ***
+&lt;none&gt;                         1901842 29433                        
++ isOrganic        1       224 1901618 29434    0.5832    0.4451    
+- abv              1    694486 2596329 30970 1804.6454 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Step:  AIC=29024.49
+ibu ~ abv + originalGravity
+
+                  Df Sum of Sq     RSS   AIC  F value    Pr(&gt;F)    
++ srm              1      8066 1742352 29004  22.8694 1.784e-06 ***
+&lt;none&gt;                         1750418 29025                       
++ isOrganic        1       104 1750314 29026   0.2925    0.5886    
+- originalGravity  1    151424 1901842 29433 427.4337 &lt; 2.2e-16 ***
+- abv              1    188326 1938744 29528 531.5987 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Step:  AIC=29003.65
+ibu ~ abv + originalGravity + srm
+
+                  Df Sum of Sq     RSS   AIC F value    Pr(&gt;F)    
+&lt;none&gt;                         1742352 29004                      
++ isOrganic        1       106 1742246 29005   0.300    0.5839    
+- srm              1      8066 1750418 29025  22.869 1.784e-06 ***
+- originalGravity  1    144403 1886755 29395 409.417 &lt; 2.2e-16 ***
+- abv              1    196392 1938744 29530 556.821 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(stepmodel1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ibu ~ abv + originalGravity + srm, data = data_clean)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-61.757 -12.510  -1.482  12.381  79.085 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     -579.96304   28.03722 -20.685  &lt; 2e-16 ***
+abv                5.83488    0.24727  23.597  &lt; 2e-16 ***
+originalGravity  556.03454   27.48013  20.234  &lt; 2e-16 ***
+srm               -0.15918    0.03329  -4.782 1.78e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 18.78 on 4940 degrees of freedom
+Multiple R-squared:  0.3289,    Adjusted R-squared:  0.3285 
+F-statistic: 807.1 on 3 and 4940 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>Now, we see that the model including all variables and excluding isOrganic, is the one providing the most benefits. But we will try another form of stepwise modeling. For Model #2, the opposite of Model #1 is performed. Model #2 starts the stepwise function with the full model (all variables), and removes variables one by one until there are no more benefits observed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>stepmodel2 <span class="ot">&lt;-</span> <span class="fu">step</span>(fullmodel, <span class="at">scope =</span> <span class="fu">list</span>(<span class="at">lower =</span> nullmodel, <span class="at">upper =</span> fullmodel), <span class="at">direction =</span> <span class="st">"both"</span>,<span class="at">test=</span><span class="st">"F"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Start:  AIC=29005.35
+ibu ~ abv + isOrganic + originalGravity + srm
+
+                  Df Sum of Sq     RSS   AIC F value    Pr(&gt;F)    
+- isOrganic        1       106 1742352 29004   0.300    0.5839    
+&lt;none&gt;                         1742246 29005                      
+- srm              1      8068 1750314 29026  22.872 1.782e-06 ***
+- originalGravity  1    144283 1886530 29397 409.021 &lt; 2.2e-16 ***
+- abv              1    196356 1938602 29531 556.639 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Step:  AIC=29003.65
+ibu ~ abv + originalGravity + srm
+
+                  Df Sum of Sq     RSS   AIC F value    Pr(&gt;F)    
+&lt;none&gt;                         1742352 29004                      
++ isOrganic        1       106 1742246 29005   0.300    0.5839    
+- srm              1      8066 1750418 29025  22.869 1.784e-06 ***
+- originalGravity  1    144403 1886755 29395 409.417 &lt; 2.2e-16 ***
+- abv              1    196392 1938744 29530 556.821 &lt; 2.2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(stepmodel2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = ibu ~ abv + originalGravity + srm, data = data_clean)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-61.757 -12.510  -1.482  12.381  79.085 
+
+Coefficients:
+                  Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     -579.96304   28.03722 -20.685  &lt; 2e-16 ***
+abv                5.83488    0.24727  23.597  &lt; 2e-16 ***
+originalGravity  556.03454   27.48013  20.234  &lt; 2e-16 ***
+srm               -0.15918    0.03329  -4.782 1.78e-06 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 18.78 on 4940 degrees of freedom
+Multiple R-squared:  0.3289,    Adjusted R-squared:  0.3285 
+F-statistic: 807.1 on 3 and 4940 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>We see here that we arrive to the same model using a different method. The p-values for each variable are less than .05, showin that they contribute significantly to predicting the output in this model. However, our <span class="math inline">\(R^2 adjusted\)</span> value has not changed. We have found the best possible model using the linear regression method, but it turns out that linear regression may not be the best method for this problem and we may need to try something else. Perhaps, a more complex machine learning algorithm might do the job well.</p>
+</section>
+</section>
+</section>
 
 </main>
 <!-- /main column -->
